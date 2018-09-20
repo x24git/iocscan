@@ -30,8 +30,9 @@ const routes: Routes = [
  { path: 'support', component: SupportComponent },
  { path: 'home', component: HomeComponent },
  { path: 'search/:ip', component: SearchComponent },
- { path: 'error/418', component: BadsearchComponent },
- { path: 'search', redirectTo: '/home' }
+ { path: 'error/:error', component: BadsearchComponent },
+ { path: 'search', redirectTo: '/home' },
+ { path: '**', redirectTo: '/error/404' }
 
 ];
 

@@ -136,7 +136,13 @@ export class SearchComponent implements OnInit {
        }
        this.isLoaded = true;
        
-     });
+     },
+     error => {
+         console.log('oops', error);
+         this.router.navigate(['/error/429']);
+         
+     }
+    );
     
   }
   blacklistQuantity(){
