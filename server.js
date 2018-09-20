@@ -3,18 +3,16 @@ const PORT = 3000;
 var createError = require('http-errors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
-var csrf = require('csurf');
+var csrf = require('csurf-expire');
 var rateLimit = require("express-rate-limit");
 var helmet = require('helmet')
 var logger = require('morgan');
 var path = require('path');
 var api = require('./support/js/api');
-var protect = require('./support/js/score')
 
-
-//Predefine any code
+//Rate Limiter
 const apiLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 15 minutes
+  windowMs: 1 * 60 * 1000, // 1 minute
   max: 5
 });
 
@@ -25,11 +23,11 @@ app.set('views', './views');
 app.set('view engine', 'jade');
 
 //Use Express Middleware
-app.use(helmet({contentSecurityPolicy:{directives:{defaultSRC: ["'self'"]}},hidePoweredBy:{setTo:'The Tears of Our Vanquished Foes'}}));
+app.use(helmet({hidePoweredBy:{setTo:'The Tears of Our Vanquished Foes'}}));
 app.use(logger('dev'));
 app.use(express.json());
 // app.use(express.static(path.join(__dirname, 'dist/x24scan')));
-app.use(cookieParser(protect.COOKIE_KEY))
+app.use(cookieParser("***REMOVED***"))
 app.use(csrf({cookie:{key:"_crdid",maxAge:60*60}}));
 app.use(function (err, req, res, next) {
   if (err.code == 'EBADCSRFTOKEN')
@@ -44,13 +42,13 @@ app.use('/api',apiLimiter, api);
 
 
 app.use(function(req, res, next) {
-  res.cookie('_csrf', req.csrfToken(), {maxAge:60*60});
+  res.cookie('XSRF-TOKEN', req.csrfToken());
   next();
 });
 
-
+app.use(express.static(path.join(__dirname, 'dist/iocscan')));
 app.get('*', function(req, res){
-    res.sendFile(path.join(__dirname, 'dist/x24scan/index.html'));
+    res.sendFile(path.join(__dirname, 'dist/iocscan/index.html'));
 });
 
 

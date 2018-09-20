@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="jumbotron">
+            <h1 class="display-3">Welcome to</h1>
+            <h1 class="display-3 text-info">IOCSCAN<wbr>.IO</h1>
+            <p class="lead">This site is designed to assist in DFIR and suspicious traffic pattern analysis. We analyze hundreds of providers, feeds, and dumps to provide an "at-a-glance" idea of the threat level posed by a given IP.</p>
+            <hr class="my-4">
+            <p>To get started enter an IP below.</p>
+            <form [formGroup]="IPSearchForm" (ngSubmit)="onSubmit()">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">ip</span>
+                    </div>
+                    <input class="form-control form-control-lg" type="text" formControlName="ip">
+                </div>
+                <div *ngIf="IPSearchForm.valid && (IPSearchForm.dirty)">
+                    <p class="text-info">..... Looks Good!</p>
+                </div>
+                <div *ngIf="IPSearchForm.invalid && (IPSearchForm.dirty)">
+                    <p class="text-danger">..... Hmm, this isn't a valid IP </p>
+                </div>
+                <p class="lead">
+                    <button class="btn btn-primary btn-lg" [disabled]="IPSearchForm.invalid">Search</button>
+                </p>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -1,4 +1,41 @@
 module.exports = {
+    beautify: function(data, alphabetize = false, prune = false) {
+        return enumerate({},data,alphabetize,prune);
+
+        function enumerate(construct,data, sort, prune) {
+            var ordered = construct
+            if (sort)
+                Object.keys(data).sort().forEach(function(key) {
+                    if (!pruneCheck(prune,data[key])){
+                        ordered[key] = data[key];
+                        if (ordered[key] instanceof Object && !(ordered[key] instanceof Array || ordered[key] instanceof Function))
+                            ordered[key] = enumerate({},ordered[key], true, prune)
+                        else if (ordered[key] instanceof Array)
+                            ordered[key] = enumerate([],ordered[key], false, prune)
+                    }
+                })
+            else
+                Object.keys(data).forEach(function(key) {
+                    if (!pruneCheck(prune,data[key])){
+                        ordered[key] = data[key];
+                        if (ordered[key] instanceof Object && !(ordered[key] instanceof Array || ordered[key] instanceof Function))
+                            ordered[key] = enumerate({},ordered[key], alphabetize, prune)
+                        else if (ordered[key] instanceof Array)
+                            ordered[key] = enumerate([],ordered[key], false, prune)
+                    }
+                })
+            return ordered
+        }
+        function pruneCheck(prune,value){
+            if (!prune)
+                return false;
+            for (var item in prune){
+                if (value == prune[item])
+                    return true;
+            }
+            return false;
+        }
+    },
     arraySearch: function(data, compare) {
         var flat = [].concat.apply([], data);
         var col = flat.indexOf(compare);

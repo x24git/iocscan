@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-primary">
+
+  <a class="navbar-brand" [routerLink]="['/home']"><img style="max-width:40px;"
+             src="../../assets/iocscan.png">&nbsp;&nbsp;iocscan.io</a>
+  <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div [ngbCollapse]="!isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault" data-target="#navbarsDefault">
+    <div (click)="isNavbarCollapsed = !isNavbarCollapsed">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/home']" [routerLinkActive]="['active']">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/about']" [routerLinkActive]="['active']">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/support']" [routerLinkActive]="['active']">Support</a>
+        </li>
+      </ul>
+    </div>
+    <form class="form-group mb-0 mx-4 w-100 mt-3 mt-lg-0 pr-3 pr-lg-0" [formGroup]="IPSearchNav" (ngSubmit)="onSubmit(errorIP)">
+      <div class="input-group my-1" (click)="errorIP.hide()" [popper]="errorIP" [popperTrigger]="'none'" [popperHideOnClickOutside]="false" [popperPlacement]="'bottom-start'">
+        <div class="input-group-prepend">
+          <span class="input-group-text">ip</span>
+        </div>
+        <input class="form-control nav-bar" type="text" placeholder="Search IOC" formControlName="ip">
+        <popper-content #errorIP>
+          <p class="bold">This is not a valid IP</p>
+        </popper-content>
+
+      </div>
+    </form>
+  </div>
+</nav>
+
+<!-- [hidden]="!(IPSearchNav.invalid && (IPSearchNav.dirty))"-->

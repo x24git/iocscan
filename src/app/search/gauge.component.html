@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-gauge text-white text-center bg-dark mb-3">
+            <div class="card-body">
+                <h4 class="card-title"></h4>
+                <ngx-gauge [type]="gaugeType" [value]="score" [label]="ts_gaugeLabel" [duration]="gaugeDuration" [max]="ts_gaugeMax" [cap]="gaugeCap" [thresholds]="thresholdConfig" [size]="ts_gaugeSize" [thick]="ts_gaugeThick">
+                </ngx-gauge>
+                <div class="container category">
+                    <span *ngIf="confidence.malware" class="badge badge-pill mx-1 badge-danger">Malware</span>
+                    <span *ngIf="confidence.adware" class="badge badge-pill mx-1 badge-warning">Adware</span>
+                    <span *ngIf="confidence.phishing" class="badge badge-pill mx-1 badge-warning">Phishing</span>
+                    <span *ngIf="confidence.exploit" class="badge badge-pill mx-1 badge-primary">Browser Exploit</span>
+                    <span *ngIf="confidence.hyjack" class="badge badge-pill mx-1 badge-primary">System Hyjacking</span>
+                    <span *ngIf="confidence.tor" class="badge badge-pill mx-1 badge-light">Tor Exit Node</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-gauge text-white text-center bg-dark mb-3">
+            <div class="card-body">
+                <h4 class="card-title"></h4>
+                <ngx-gauge [type]="gaugeType" [value]="confidence.score" [label]="conf_gaugeLabel" [duration]="gaugeDuration" [max]="conf_gaugeMax" [cap]="gaugeCap" [thresholds]="conf_thresholdConfig" [size]="conf_gaugeSize" [thick]="conf_gaugeThick" [append]="gaugeAppend" >
+                </ngx-gauge>
+            </div>
+            <div *ngIf="confidence.isReduced" class="card-gauge footer">
+                <span class="align-middle">
+                <div [ngSwitch]="confidence.issues">
+                    <p *ngSwitchCase="4"class="pb-0"></p>   
+                    <p *ngSwitchCase="3"class="pb-1"></p>   
+                    <p *ngSwitchCase="2"class="pb-2"></p>   
+                    <p *ngSwitchCase="1"class="pb-3"></p>   
+                    <p *ngSwitchDefault class="pb-0"></p>
+                </div>
+                <strong>Confidence is reduced by:</strong>
+                <hr class="my-0">
+                <ul class="text-left">
+                    <li *ngIf="confidence.old"> Not enough recent data </li>
+                    <li *ngIf="confidence.country"> Country of Origin </li>
+                    <li *ngIf="confidence.trend"> Downward trending score </li>
+                    <li *ngIf="confidence.data"> Limited avaliable data </li>
+                    <li *ngIf="confidence.category"> Uncertain cateogization </li>
+                </ul>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
