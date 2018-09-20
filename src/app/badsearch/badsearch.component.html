@@ -7,6 +7,7 @@
                 <div *ngFor="let message of error.message">
                     <p>{{message}}</p>
                 </div>
+                <a *ngIf="error.code == 503" class='btn btn-success btn-lg' placement='bottom' ngbTooltip='You are a Hero!' href='https://support.worldwildlife.org/site/Donation2?df_id=12623&12623.donation=form1&s_src=AWE1800OQ18494A01430RX&gclid=CjwKCAjwio3dBRAqEiwAHWsNVefO7wPFxywr0cIWDbAUOimAyBJYwAejaAYcJnKLZFij-jQZ-GpuDBoCk14QAvD_BwE' role='button'>Save a Rhino</a>
 
             </div>
         </div>

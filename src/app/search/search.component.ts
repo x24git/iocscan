@@ -139,7 +139,15 @@ export class SearchComponent implements OnInit {
      },
      error => {
          console.log('oops', error);
-         this.router.navigate(['/error/429']);
+         console.log(error.status)
+         if (error.status == 429)
+            this.router.navigate(['/error/429']);
+         else if (error.status == 404)
+            this.router.navigate(['/error/404']);
+         else if (error.status == 403)
+            this.router.navigate(['/error/403']);
+         else 
+            this.router.navigate(['/error/503']);
          
      }
     );
