@@ -1,0 +1,2 @@
+release: ng build --prod
+web: node server.js --env production

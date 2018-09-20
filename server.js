@@ -1,5 +1,9 @@
 // Call Dependancies
-const PORT = 3000;
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
 var createError = require('http-errors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
@@ -72,11 +76,11 @@ app.use(function(err, req, res, next) {
 
 
 
-app.listen(PORT, (err) => {
+app.listen(port, (err) => {
 	if (err) {
 		console.log("Error occurred", err) ;
 	}
-	console.log(`Server is listening on port ${PORT}`);
+	console.log(`Server is listening on port ${port}`);
 });
 
 
