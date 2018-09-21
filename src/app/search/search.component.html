@@ -91,10 +91,10 @@
                     <span *ngIf="result.as_name  && result.as_name  != 'NA'"> ● <span style="color: coral;"> {{ result.as_name }} </span></span>
                   </h4>
                 </div>
-                <div class="card-body" *ngIf="result.asn">
+                <div class="card-body" *ngIf="result.location || (result.asn_registry && result.asn_registry != 'NA')">
                   <div class="row location">
                     <div class="col-lg-8">
-                      <ioc-map [lat]="result.location.lat" [lon]="result.location.lon"></ioc-map>
+                      <ioc-map [hidden]="!result.location" [lat]="result.location.lat" [lon]="result.location.lon"></ioc-map>
                     </div>
                     <div class="col-lg-4 order-first pr-0">
                       <div class="location-info">

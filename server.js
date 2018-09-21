@@ -1,9 +1,8 @@
 // Call Dependancies
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
 
+var http = require('http');
+var https = require("https"),
+   fs = require("fs");
 var createError = require('http-errors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
@@ -13,6 +12,14 @@ var helmet = require('helmet')
 var logger = require('morgan');
 var path = require('path');
 var api = require('./support/js/api');
+
+//SSH keys (comment out if not using SSH)
+var port = 8000;
+var port_ssl = 4433;
+const options = {
+  key: fs.readFileSync("***REMOVED***.key"),
+  cert: fs.readFileSync("***REMOVED***.pem")
+}
 
 //Rate Limiter
 const apiLimiter = rateLimit({
@@ -76,12 +83,17 @@ app.use(function(err, req, res, next) {
 
 
 
-app.listen(port, (err) => {
+http.createServer(app).listen(port, (err) => {
 	if (err) {
 		console.log("Error occurred", err) ;
 	}
 	console.log(`Server is listening on port ${port}`);
 });
 
-
+https.createServer(options, app).listen(port_ssl, (err) => {
+	if (err) {
+		console.log("Error occurred", err) ;
+	}
+	console.log(`Server is listening on port ${port_ssl}`);
+});
 
