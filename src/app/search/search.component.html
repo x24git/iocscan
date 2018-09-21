@@ -87,11 +87,11 @@
               <div class="card text-white mb-3 bg-dark ">
                 <div class="card-header ">
                   <h4>
-                    <fa-icon [icon]="faMapMarkerAlt" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Location <span *ngIf="result.location.country"> ● </span><span *ngIf="result.location.city" style="font-style: italic; color: palegreen;"> {{ result.location.city }} — </span><span style="font-style: italic; color: palegreen; ">{{ result.location.country }} </span>
+                    <fa-icon [icon]="faMapMarkerAlt" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Location <span *ngIf="result.location && result.location.country"> ● </span><span *ngIf="result.location && result.location.city" style="font-style: italic; color: palegreen;"> {{ result.location.city }} — </span><span *ngIf="result.location && result.location.country" style="font-style: italic; color: palegreen;">{{ result.location.country }} </span>
                     <span *ngIf="result.as_name  && result.as_name  != 'NA'"> ● <span style="color: coral;"> {{ result.as_name }} </span></span>
                   </h4>
                 </div>
-                <div class="card-body ">
+                <div class="card-body" *ngIf="result.asn">
                   <div class="row location">
                     <div class="col-lg-8">
                       <ioc-map [lat]="result.location.lat" [lon]="result.location.lon"></ioc-map>
