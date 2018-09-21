@@ -26,7 +26,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:x24git/x24scan.git',
       path : '~/iocscan/x24scan',
-      'post-deploy' : 'npm install && npm run prod && pm2 reload ecosystem.config.js --env production && sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000 && sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 4433'
+      'post-deploy' : 'npm install &&  reload ecosystem.config.js --env production && npm run prod'
     },
     development : {
       key  : 'C:/ProgramData/manager/manager.pem',
@@ -36,7 +36,7 @@ module.exports = {
       ref  : 'origin/master',
       repo : 'git@github.com:x24git/x24scan.git',
       path : '~/iocscan/x24scan',
-      'post-deploy' : 'npm install && npm run dev && pm2 reload ecosystem.config.js --env development  && sudo iptables -t nat -A PREROUTING -p tcp --dport 9000 -j REDIRECT --to-ports 8000 && sudo iptables -t nat -A PREROUTING -p tcp --dport 9443 -j REDIRECT --to-ports 4433'
+      'post-deploy' : 'npm install && npm run dev'
     }
   }
 };

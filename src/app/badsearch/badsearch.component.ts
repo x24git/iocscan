@@ -10,9 +10,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class BadsearchComponent implements OnInit {
 
   error: any = {}
-  constructor(private titleService: Title, private route: ActivatedRoute, private router: Router) { 
+  constructor(private titleService: Title, private route: ActivatedRoute, private router: Router) {
     this.error.code = this.route.snapshot.paramMap.get('error')
-    
+
     switch (this.error.code){
       case '418':
         this.error.heading = "I'm a teapot";
@@ -38,6 +38,12 @@ export class BadsearchComponent implements OnInit {
         this.error.background = "url('../../assets/flash.jpg')";
         this.error.title = "Back in a Flash";
         break;
+      case '421':
+          this.error.heading = "This isn't your house";
+          this.error.message = ["You seem to be trying to search for private address spaces","It's at this time you should take a good long look at yourself and decide if you yourself are the threat actor."];
+          this.error.background = "url('../../assets/private.jpg')";
+          this.error.title = "Respect Privacy";
+          break;
       case '404':
         this.error.heading = "Woah, there this isn't right";
         this.error.message = ["You seem to be very lost... lost in space.","Be careful out there in space, there is no oxygen."];
@@ -51,14 +57,14 @@ export class BadsearchComponent implements OnInit {
         this.error.message = ["You seem to be very lost... lost in space.","Be careful out there in space, there is no oxygen."];
         this.error.background = "url('../../assets/space.png')";
         this.error.title = "Lost in Space";
-      
+
     }
   }
-  
+
   public setTitle( newTitle: string) {
     this.titleService.setTitle( newTitle );
   }
-  
+
   ngOnInit() {
     this.setTitle(this.error.title)
   }

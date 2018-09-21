@@ -73,8 +73,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? {} : {};
-  console.log(req.app.get('env'));
+  res.locals.error = req.app.get('env') === 'development' ? {status:err.status, message:err.message} : {status:err.status, message:err.message};
 
   // render the error page
   res.status(err.status || 500);
@@ -96,4 +95,3 @@ https.createServer(options, app).listen(port_ssl, (err) => {
 	}
 	console.log(`Server is listening on port ${port_ssl}`);
 });
-

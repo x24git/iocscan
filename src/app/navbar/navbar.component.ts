@@ -9,19 +9,19 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  
+
   public isNavbarCollapsed = false;
   popover: any;
   IPSearchNav = this.fb.group({
-      ip: ['', Validators.pattern('^((([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])))$')]
+      ip: ['', Validators.pattern('^((([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])))$')]
    })
-   
-   
-  
-  constructor(private fb: FormBuilder, private router: Router) { 
+
+
+
+  constructor(private fb: FormBuilder, private router: Router) {
 
   }
-  
+
   onSubmit(popover) {
     if (this.IPSearchNav.valid) {
       console.log("Form Submitted!");

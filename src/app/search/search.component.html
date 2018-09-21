@@ -94,7 +94,7 @@
                 <div class="card-body" *ngIf="result.location || (result.asn_registry && result.asn_registry != 'NA')">
                   <div class="row location">
                     <div class="col-lg-8">
-                      <ioc-map [hidden]="!result.location" [lat]="result.location.lat" [lon]="result.location.lon"></ioc-map>
+                      <ioc-map *ngIf="result.location" [lat]="result.location.lat" [lon]="result.location.lon"></ioc-map>
                     </div>
                     <div class="col-lg-4 order-first pr-0">
                       <div class="location-info">

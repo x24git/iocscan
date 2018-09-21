@@ -28,8 +28,8 @@ export class SearchComponent implements OnInit {
         '2': {color: 'yellow'},
         '6': {color: 'orange'},
         '8': {color: 'red'}
-    }; 
- 
+    };
+
   progressBar: NgProgressRef;
   header: NgProgressRef;
   quantity_blacklist: number = 4;
@@ -41,15 +41,15 @@ export class SearchComponent implements OnInit {
   public confidence: any = {score: '0', issues:0};
   bg: string = "bg-info";
   border: string = "border-info";
-  
+
   result: any = [];
-  
+
   constructor(private ipinfoService: IpinfoService,  private countryCode: CountryCodeService, ngProgress: NgProgress, private route: ActivatedRoute, private router: Router, private titleService: Title ) {
         this.router.routeReuseStrategy.shouldReuseRoute = function() {
             return false;
         };
       this.ip = this.route.snapshot.paramMap.get('ip')
-      let checker = new RegExp('^((([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)(([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])))$')
+      let checker = new RegExp('^((([1-9]|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.)((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])))$')
       if (!checker.test(this.ip))
         this.router.navigate(['/error/418']);
       else
@@ -96,7 +96,7 @@ export class SearchComponent implements OnInit {
             this.confidence.hyjack = (this.result.category.category.includes("System Hyjacking")) ? true : false;
             this.confidence.phishing = (this.result.category.category.includes("Phishing")) ? true : false;
             this.confidence.tor = (this.result.category.category.includes("TOR exit node")) ? true : false;
-       }    
+       }
        if(this.result.score.old || !this.result.score.trend || this.result.score.limitedData || this.result.category.category.length > 1){
            this.confidence.isReduced = true;
            if (this.result.score.old){
@@ -135,7 +135,7 @@ export class SearchComponent implements OnInit {
            this.border = "border-danger"
        }
        this.isLoaded = true;
-       
+
      },
      error => {
          console.log('oops', error);
@@ -144,14 +144,16 @@ export class SearchComponent implements OnInit {
             this.router.navigate(['/error/429']);
          else if (error.status == 404)
             this.router.navigate(['/error/404']);
+         else if (error.status == 421)
+               this.router.navigate(['/error/421']);
          else if (error.status == 403)
             this.router.navigate(['/error/403']);
-         else 
+         else
             this.router.navigate(['/error/503']);
-         
+
      }
     );
-    
+
   }
   blacklistQuantity(){
       if(this.quantity_blacklist == 4){
