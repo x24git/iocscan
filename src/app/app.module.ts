@@ -7,7 +7,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { ReactiveFormsModule }   from '@angular/forms';
 import { NgProgressModule } from '@ngx-progressbar/core';
 import { NgProgressHttpModule } from '@ngx-progressbar/http';
-import { NgxGaugeModule } from 'ngx-gauge';
+import { NgxGaugeModule } from 'ngx-gauge-fix';
 import { NgArrayPipesModule } from 'ngx-pipes';
 import { NgxPopperModule } from 'ngx-popper';
 
