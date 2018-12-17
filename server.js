@@ -6,7 +6,7 @@ var https = require("https"),
 var createError = require('http-errors');
 var express = require('express');
 var cookieParser = require('cookie-parser');
-var csrf = require('csurf-expire');
+var csrf = require('csurf');
 var rateLimit = require("express-rate-limit");
 var helmet = require('helmet')
 var logger = require('morgan');
@@ -24,7 +24,7 @@ const options = {
 //Rate Limiter
 const apiLimiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 5
+  max: 15
 });
 
 //Start Express Settings
@@ -39,7 +39,7 @@ app.use(logger('dev'));
 app.use(express.json());
 // app.use(express.static(path.join(__dirname, 'dist/x24scan')));
 app.use(cookieParser("***REMOVED***"))
-app.use(csrf({cookie:{key:"_crdid",maxAge:60*60}}));
+app.use(csrf({cookie:{key:"_crdid"}}));
 app.use(function (err, req, res, next) {
   if (err.code == 'EBADCSRFTOKEN')
     err.status = 403
