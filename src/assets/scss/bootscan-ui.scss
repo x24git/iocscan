@@ -1,0 +1,32 @@
+/*!
+
+ =========================================================
+ * BootScan UI Angular - v1.0.0
+ =========================================================
+
+ * Copyright 2018 Christopher Makarem (https://www.christopher-makarem.me)
+
+
+ =========================================================
+
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+ */
+ 
+ @import 'bootscan-ui/variables-custom';
+ @import "~bootstrap/scss/bootstrap";
+
+ @import 'bootscan-ui/bootswatch';
+ @import 'bootscan-ui/variables';
+
+ // //Plugins CSS
+ // @import "bootscan-ui/plugins/plugin-animate-bootstrap-notify";
+ // @import "bootscan-ui/plugins/plugin-perfect-scrollbar";
+
+ //cards
+ @import "bootscan-ui/cards";
+ @import "bootscan-ui/cards/card-plain";
+ @import "bootscan-ui/cards/card-chart";
+ @import "bootscan-ui/cards/card-user";
+ @import "bootscan-ui/cards/card-map";
+

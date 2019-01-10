@@ -18,12 +18,24 @@ export class MapComponent implements OnInit {
     @Input() lat: number;
     @Input() lon: number;
 
+
   constructor() { }
 
   ngOnInit() {
+    let fail = false;
+    if (!this.lat && !this.lon){
+      this.lat = 0;
+      this.lon = 0;
+      fail = true
+    }
+    else
+      fail = false;
     var myLatlng = new google.maps.LatLng(this.lat, this.lon);
+    var zoom = 9;
+    if (fail)
+      zoom = 1;
     var mapOptions = {
-        zoom: 9,
+        zoom: zoom,
         maxZoom:12,
         zoomControl: true,
         mapTypeControl: false,
@@ -358,11 +370,12 @@ export class MapComponent implements OnInit {
 
     var marker = new google.maps.Marker({
         position: myLatlng,
-        title: "Hello World!"
+        title: "IOC"
     });
 
     // To add the marker to the map, call setMap();
-    marker.setMap(map);
+    if (!fail)
+       marker.setMap(map);
   }
 
 }

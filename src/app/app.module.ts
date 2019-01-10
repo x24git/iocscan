@@ -29,7 +29,8 @@ const routes: Routes = [
  { path: 'about', component: AboutComponent },
  { path: 'support', component: SupportComponent },
  { path: 'home', component: HomeComponent },
- { path: 'search/:ip', component: SearchComponent },
+ { path: 'search/ip/:ip', component: SearchComponent },
+ { path: 'search/domain/:domain', component: SearchComponent },
  { path: 'error/:error', component: BadsearchComponent },
  { path: 'search', redirectTo: '/home' },
  { path: '**', redirectTo: '/error/404' }

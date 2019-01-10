@@ -19,7 +19,9 @@ $theme-colors: map-merge(
     "danger":     $danger,
     "light":      $light,
     "darker":     $darker,
-    "dark":       $dark
+    "dark":       $dark,
+    "whiter":     $whiter,
+    
   ),
   $theme-colors
 );

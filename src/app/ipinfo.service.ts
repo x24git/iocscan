@@ -10,15 +10,16 @@ export class IpinfoService {
   constructor(private http: HttpClient) { }
 
   // Get all posts from the API
-  getData(ip) {
-    let data = {"ip": ip};
+  getData(data,type) {
+    let body = {};
+    body[type] = data;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
       })
     };
 
-    return this.http.post('/api/ip',data,httpOptions) 
+    return this.http.post('/api/'+ type,body,httpOptions) 
       //.subscribe(res => console.log(res.json()));
       // .catch(this.handleErrorObservable);
   }

@@ -1,5 +1,4 @@
 // Call Dependancies
-
 var http = require('http');
 var https = require("https"),
    fs = require("fs");
@@ -28,9 +27,10 @@ const apiLimiter = rateLimit({
 });
 
 //Start Express Settings
+var inDevelopment = false; //used for debugging TURN OFF WHEN GOING IN PRODUCTION
 var app = express();
 app.enable('trust proxy');
-app.set('views', './views');
+app.set('views', './support/jade');
 app.set('view engine', 'jade');
 
 //Use Express Middleware
@@ -57,9 +57,10 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use(express.static(path.join(__dirname, 'dist/iocscan')));
+app.use(express.static(path.join(__dirname, 'prod/iocscan')));
+app.use(express.static(path.join(__dirname, 'support/img')));
 app.get('*', function(req, res){
-    res.sendFile(path.join(__dirname, 'dist/iocscan/index.html'));
+    res.sendFile(path.join(__dirname, 'prod/iocscan/index.html'));
 });
 
 
@@ -77,6 +78,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
+  res.locals.error.development = inDevelopment;
   res.render('csrf');
 });
 
