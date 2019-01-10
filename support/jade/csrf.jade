@@ -1,0 +1,55 @@
+doctype html
+html(lang='en')
+  head
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='robots', content='NONE,NOARCHIVE')
+    title Undergoing Maintenance
+    link(rel='stylesheet', href='bootscan-ui.min.css')
+    style(type='text/css').
+      html { padding:0; margin:0; }
+      body {padding: 10px 20px;
+            position: absolute;
+            display: flex;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            height: 100vh;
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+              padding:0;
+              font:small sans-serif;
+              background: url('Construction.jpg') no-repeat center center fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+            background-size: cover;
+            border-bottom:1px solid #ddd;
+            background-color: rgba(0, 0, 0, 0.51);
+            background-blend-mode: darken;
+            background-position: center;}
+      .error-middle { position:relative; color: white}
+
+  body
+    .error-middle.py-3.px-3.text-center
+      if error.development
+        h1=error.status+"  "     
+          span=error.code
+        p=error.message
+      else
+        h1 Improving our Infrastructure
+        br
+      if !error.development
+        p 
+          | This site is currently undergoing routine maintenance and is unavaliable for a short time. 
+          br
+          br
+          | These maintenance periods usually take no more than 10 minutes, so please try again soon. Thank you for your patience.
+      else if error.development && error.status != 403
+        p #{error.stack}
+      else
+        p You are seeing this message because this site requires a CSRF cookie when submitting forms. This cookie is required for security reasons, to ensure that your browser is not being hijacked by third parties.
+        p If you have configured your browser to disable cookies, please re-enable them, at least for this site, or for 'same-origin' requests.
+      
+

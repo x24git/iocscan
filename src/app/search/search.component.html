@@ -9,6 +9,28 @@
           <ngb-progressbar type="info" [value]="(progressBar.state$ | async)  .value" [striped]="true" [height]="state.active ? '1rem' : '0rem'" [animated]="true"></ngb-progressbar>
 
         </p>
+        <div *ngIf="!isLoaded">
+          <br>
+          <br>
+          <p class="card-text text-center">Scanning for IOCs (may take up to 10 seconds to fully scan). Please Wait...</p>
+          <br>
+          <p class="lead text-center">{{loading}}</p>
+        </div>
+          <div class="row" *ngIf="result.subdomain">
+            <div Class="card text-white mb-3 bg-warning">
+              <div class="card-header">
+                <h4>
+                  <fa-icon [icon]="faExclamation" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Alert</h4>
+              </div>
+              <div class="card-body">
+               <p class="card-text">We only support searching of Root-Level Domains. We are searching instead for: <b class = "text-dark">{{result.domain}}</b> <br>
+                  and have dropped the subdomain of: <b class = "text-dark">{{result.subdomain}}</b></p>
+              </div>
+              <div class="card-footer">
+              </div>
+            </div>
+          </div>        
+        
         <gauge-component [hidden]="!isLoaded" [score]="score" [confidence]="confidence"></gauge-component>
         <div *ngIf="isLoaded">
           <div class="row">
@@ -22,20 +44,54 @@
               </div>
             </div>
           </div>
-          <div class="row" *ngIf="result.score.multihosted >= 0 || result.ransom || result.shodan || result.score.grey.reputation < 10">
+          <div class="row" *ngIf="(result.score.multihosted && result.score.multihosted >= 0) || result.ransom || result.shodan || result.score.grey.reputation < 10 || (result.whitelist && result.whitelist.sources) ||result.google">
             <div class="card text-white mb-3 bg-dark ">
               <div class="card-header">
                 <h4>
                   <fa-icon [icon]="faKeycdn" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Key Notes</h4>
               </div>
               <div class="card-body">
-                <div class="alert alert-success py-1" *ngIf="result.score.multihosted == 1">
+                <div class="alert alert-whiter py-1" *ngIf="result.whitelist && result.whitelist.sources">
+                  <span class="lead" style="color: #29335C;"><b> Domain has been Whitelisted: </b></span>
+                  <br>
+                  <ul>
+                    <li style="color: #29335C;"><b>Reasons:</b>
+                      <div *ngIf="result.whitelist.sources.length > 0" style="display: inline-block;">
+                        <div *ngFor="let sources of result.whitelist.sources" style="display: inline-block;">
+                          <span class="badge badge-light mx-1"> {{ sources }} </span>
+                        </div>
+                      </div>
+                      <div *ngIf="result.whitelist.sources.length == 0" style="display: inline-block;"> <span class="badge badge-light mx-1">Unknown</span></div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="alert alert-success py-1" *ngIf="(result.score.multihosted == 1 && result.type == 'ip')">
                   <span class="lead"><b> IP is multihosted - </b></span> Please verify that the visited domain is one known to be suspicious.
                 </div>
-                <div class="alert alert-info py-1" *ngIf="result.score.multihosted == 0">
+                <div class="alert alert-info py-1" *ngIf="(result.score.multihosted == 0 && result.type == 'domain')">
                   <span class="lead"><b> IP may be multihosted - </b></span> You may need to verify that the visited domain is one known to be suspicious.
                 </div>
-                 <div class="alert alert-danger py-1" *ngIf="result.c2 && result.c2.name">
+                <div class="alert alert-success py-1" *ngIf="(result.score.multihosted == 1 && result.type == 'domain')">
+                  <span class="lead"><b> Domain uses Dynamic DNS - </b></span> DNS entries for this domain are changing frequently which may be a sign of botnet activity.
+                </div>
+                <div class="alert alert-info py-1" *ngIf="(result.score.multihosted == 0 && result.type == 'domain')">
+                  <span class="lead"><b> Domain likely uses Dynamic DNS - </b></span> DNS entries for this domain are changing slowly, botnet activity is possible but unlikely.
+                </div>
+                <div class="alert alert-danger py-1" *ngIf="result.google && result.google.count">
+                  <span class="lead"><b> Blacklisted on Google SafeSearch: </b></span>
+                  <br>
+                  <ul>
+                    <li style="color: #29335C;"><b>Classification:</b>
+                      <div *ngIf="result.google.count > 0" style="display: inline-block;">
+                        <div *ngFor="let category of result.google.category" style="display: inline-block;">
+                          <span class="badge badge-warning mx-1"> {{ category }} </span>
+                        </div>
+                      </div>
+                      <div *ngIf="result.google.count == 0" style="display: inline-block;"> <span class="badge badge-warning mx-1">Unknown</span></div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="alert alert-danger py-1" *ngIf="result.c2 && result.c2.name">
                   <span class="lead"><b> C2 Server Detected - </b></span> {{result.c2.name}} Command & Control Server at <span class="text-muted"> {{result.c2.domain}} </span>
                 </div>
                 <div class="alert alert-danger py-1" *ngIf="result.ransom">
@@ -82,23 +138,72 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          
+          <div class="row" *ngIf="result.blacklist.length > 0">
+            <div Class="card text-white mb-3 bg-dark">
+              <div class="card-header bg-danger">
+                <h4>
+                  <fa-icon [icon]="faExclamationTriangle" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Blacklists</h4>
+              </div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Source</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of result.blacklist | reverse | slice:0:quantity_blacklist">
+                      <td>{{ item.description }}</td>
+                      <td>{{ item.source }}</td>
+                      <td>{{ item.last_seen }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-footer">
+                <p class="lead">
+                  Total Count: <strong>{{ result.blacklist.length }}</strong></p>
+                <a *ngIf="result.blacklist && result.blacklist.length > 4 && quantity_blacklist == 4" href="javascript:void(0)" (click)="blacklistQuantity()" class="card-link">Show More</a>
+                <a *ngIf="result.blacklist && result.blacklist.length > 4 && quantity_blacklist > 4" href="javascript:void(0)" (click)="blacklistQuantity()" class="card-link">Show Less</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row" *ngIf="(result.whois && result.whois.isAvailable && !result.location.lat && result.type == 'domain')">
+            <div Class="card text-white mb-3 bg-success">
+              <div class="card-header">
+                <h4>
+                  <fa-icon [icon]="faFileInvoice" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Not Registered</h4>
+              </div>
+              <div class="card-body">
+               <p class="lead"> <b>It appears that this domain has not yet been registered. </b></p>
+              </div>
+              <div class="card-footer">
+              </div>
+            </div>
+          </div>
+          
+          <div class="row" *ngIf="((result.location && result.location.country) || (result.whois && !result.whois.isAvailable) || result.asn_registry)">
             <div class="col-md-12 px-0">
               <div class="card text-white mb-3 bg-dark ">
                 <div class="card-header ">
                   <h4>
-                    <fa-icon [icon]="faMapMarkerAlt" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Location <span *ngIf="result.location && result.location.country"> ● </span><span *ngIf="result.location && result.location.city" style="font-style: italic; color: palegreen;"> {{ result.location.city }} — </span><span *ngIf="result.location && result.location.country" style="font-style: italic; color: palegreen;">{{ result.location.country }} </span>
+                    <fa-icon [icon]="faMapMarkerAlt" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Location <span *ngIf="result.location && result.location.country"> ● </span><span *ngIf="result.location && result.location.city" style="font-style: italic; color: palegreen;"> {{ result.location.city }} — </span>
+                    <span *ngIf="result.location && result.location.country" style="font-style: italic; color: palegreen;">{{ result.location.country }} </span>
                     <span *ngIf="result.as_name  && result.as_name  != 'NA'"> ● <span style="color: coral;"> {{ result.as_name }} </span></span>
                   </h4>
                 </div>
-                <div class="card-body" *ngIf="result.location || (result.asn_registry && result.asn_registry != 'NA')">
+                <div class="card-body">
                   <div class="row location">
                     <div class="col-lg-8">
-                      <ioc-map *ngIf="result.location" [lat]="result.location.lat" [lon]="result.location.lon"></ioc-map>
+                      <ioc-map  [lat]="result.location.lat" [lon]="result.location.lon"></ioc-map>
                     </div>
                     <div class="col-lg-4 order-first pr-0">
                       <div class="location-info">
-                        <div class="location-item" *ngIf="result.asn_registry && result.asn_registry != 'NA'">
+                        <div class="location-item" *ngIf="(result.asn_registry && result.asn_registry != 'NA' && result.type == 'ip')">
                           <div class="row">
                             <div class="col-4 category pl-0">
                               <fa-icon [icon]="faGlobeAmericas"></fa-icon> Autonomous System
@@ -134,7 +239,52 @@
                             </div>
                           </div>
                         </div>
-                        <div class="location-item" *ngIf="result.address">
+                        <div class="location-item" *ngIf="result.whois && !result.whois.isAvailable && result.type == 'domain'">
+                          <div class="row">
+                            <div class="col-4 category pl-0">
+                              <fa-icon [icon]="faGlobeAmericas"></fa-icon> Domain Registration (WHOIS)
+                              <br>
+                            </div>
+                            <div class="col-8 content no-top-border pl-1">
+                              <div *ngIf="result.whois && result.whois.length && result.whois.length <= 3 && !result.whois.registrar && !result.whois.status">
+                                <dt style="width: 200px;">No Registration Data Avaliable</dt>
+                                <dd></dd>
+                              </div>
+                              <div *ngIf="result.whois.registrar">
+                                <dt>Registrar:</dt>
+                                <dd> {{ result.whois.registrar }}</dd>
+                              </div>
+                              <div *ngIf="result.whois.name">
+                                <dt>Registrant:</dt>
+                                <dd> {{ result.whois.name }}</dd>
+                              </div>
+                              <div *ngIf="result.whois.org">
+                                <dt>Organization:</dt>
+                                <dd> {{ result.whois.org }}</dd>
+                              </div>
+                              <div *ngIf="result.whois.country">
+                                <dt>Reg. Country:</dt>
+                                <dd>{{ result.whois.country }}<span *ngIf="result.whois.country_full && result.whois.country != result.whois.country_full "> ({{ result.whois.country_full }}) </span></dd>
+                              </div>
+                              <div *ngIf="result.whois.email">
+                                <dt>Email:</dt>
+                                <dd> {{ result.whois.email }}</dd>
+                              </div>
+                              <div *ngIf="result.whois.phone">
+                                <dt>Phone:</dt>
+                                <dd> {{ result.whois.phone }}</dd>
+                              </div>
+                              <div *ngIf="(!result.whois.registrar && !result.whois.name) && result.whois.status ">
+                                <dt>Status:</dt>
+                                <dd> {{ result.whois.status }}</dd>
+                              </div>
+
+                              <dt><br></dt>
+                              <dd> </dd>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="location-item" *ngIf="result.address && result.type == 'ip'">
                           <div class="row">
                             <div class="col-4 category pl-0">
                               <fa-icon [icon]="faBuilding"></fa-icon> Registrant Information
@@ -154,7 +304,31 @@
                             </div>
                           </div>
                         </div>
-                        <div class="location-item" *ngIf="result.location">
+                        <div class="location-item" *ngIf="result.whois && (result.whois.created || result.whois.expired) && result.type == 'domain'">
+                          <div class="row">
+                            <div class="col-4 category pl-0">
+                              <fa-icon [icon]="faCalendarAlt"></fa-icon> Dates
+                              <br>
+                            </div>
+                            <div class="col-8 content pl-0">
+                              <div *ngIf="result.whois.updated">
+                                <dt>Updated:</dt>
+                                <dd> {{ result.whois.updated }}</dd>
+                              </div>
+                              <div *ngIf="result.whois.created">
+                                <dt>Created:</dt>
+                                <dd> {{ result.whois.created }}</dd>
+                              </div>
+                              <div *ngIf="result.whois.expired">
+                                <dt>Expires:</dt>
+                                <dd> {{ result.whois.expired }}</dd>
+                              </div>
+                              <dt><br></dt>
+                              <dd> </dd>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="location-item" *ngIf="result.location && result.location.lat != false">
                           <div class="row">
                             <div class="col-4 category pl-0">
                               <fa-icon [icon]="faMapSigns"></fa-icon>Location Data
@@ -193,29 +367,13 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" *ngIf="result.blacklist.length <= 0">
             <div Class="card text-white mb-3 bg-dark">
               <div class="card-header">
                 <h4>
                   <fa-icon [icon]="faExclamationTriangle" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Blacklists</h4>
               </div>
               <div class="card-body">
-                <table class="table table-striped" *ngIf="result.blacklist.length > 0">
-                  <thead>
-                    <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Source</th>
-                      <th scope="col">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let item of result.blacklist | reverse | slice:0:quantity_blacklist">
-                      <td>{{ item.description }}</td>
-                      <td>{{ item.source }}</td>
-                      <td>{{ item.last_seen }}</td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
               <div class="card-footer">
                 <p class="lead">
@@ -229,7 +387,7 @@
 
           <div class="row">
             <div Class="card text-white mb-3 bg-dark">
-              <div class="card-header">
+              <div class="card-header" [class.bg-warning] = "result.malware.list">
                 <h4>
                   <fa-icon [icon]="faBug" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Malware</h4>
               </div>
@@ -249,45 +407,109 @@
                     </tr>
                   </tbody>
                 </table>
+                <div *ngIf="result.malware == 'FA'">
+                  <p class="lead"> Something went wrong and we were unable to gather malware information at this time. Please try again later.</p>
+                </div>
               </div>
-              <div class="card-footer">
+              <div *ngIf="result.malware != 'FA'" class="card-footer">
                 <p class="lead">
                   Total Count: <strong>{{ result.malware.count }}</strong></p>
                 <a *ngIf="result.malware.count > 4 && quantity_malware == 4" href="javascript:void(0)" (click)="malwareQuantity()" class="card-link">Show More</a>
                 <a *ngIf="result.malware.count > 4 && quantity_malware > 4" href="javascript:void(0)" (click)="malwareQuantity()" class="card-link">Show Less</a>
+              </div>
+              <div *ngIf="result.malware == 'FA'" class="card-footer">
+                <p class="lead">
+                  Total Count: <strong>0</strong></p>
+              </div>
+            </div>
+          </div>
 
+          <div class="row" *ngIf="result.type == 'domain'">
+            <div Class="card text-white mb-3 bg-dark">
+              <div class="card-header">
+                <h4>
+                  <fa-icon [icon]="faNetworkWired" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Passive DNS</h4>
+              </div>
+              <div class="card-body">
+                <table class="table table-striped" *ngIf="result.ip.list">
+                  <thead>
+                    <tr>
+                      <th scope="col">IP</th>
+                      <th scope="col">Hostname</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of result.ip.list  | slice:0:quantity_ip">
+                      <td><a href="../search/ip/{{item.ip}}">{{ item.ip }}</a></td>
+                      <td>{{ item.hostname }}</td>
+                      <td>{{ item.date }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div *ngIf="result.ip == 'FA'">
+                  <p class="lead"> Something went wrong and we were unable to gather DNS information at this time. Please try again later.</p>
+                </div>
+              </div>
+              <div *ngIf="result.ip != 'FA'" class="card-footer">
+                <p class="lead">
+                  Total Count: <strong>{{ result.ip.count }}</strong></p>
+                <a *ngIf="result.ip && result.ip.count > 4 && quantity_ip == 4" href="javascript:void(0)" (click)="ipQuantity()" class="card-link">Show More</a>
+                <a *ngIf="result.ip && result.ip.count > 4 && quantity_ip > 4" href="javascript:void(0)" (click)="ipQuantity()" class="card-link">Show Less</a>
+              </div>
+              <div *ngIf="result.ip == 'FA'" class="card-footer">
+                <p class="lead">
+                  Total Count: <strong>0</strong></p>
               </div>
             </div>
           </div>
 
           <div class="row">
             <div Class="card text-white mb-3 bg-dark">
-              <div class="card-header">
+              <div *ngIf="result.type == 'ip'" class="card-header">
                 <h4>
-                  <fa-icon [icon]="faGlobe" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Resolved URLs</h4>
+                  <fa-icon [icon]="faGlobe" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Resolved Domains
+                </h4>
+              </div>
+              <div *ngIf="result.type == 'domain'" class="card-header">
+                <h4>
+                  <fa-icon [icon]="faGlobe" class="icon-card"></fa-icon>&nbsp;&nbsp;&nbsp;Related URLs
+                </h4>
               </div>
               <div class="card-body">
                 <table class="table table-striped" *ngIf="result.url.list">
                   <thead>
                     <tr>
-                      <th scope="col">Domain</th>
+                      <th scope="col">URL</th>
                       <th scope="col">Date</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody *ngIf="result.type == 'ip'">
                     <tr *ngFor="let item of result.url.list | slice:0:quantity_url">
-                      <td>{{ item.domain }}</td>
+                      <td><a href="../search/domain/{{item.domain}}">{{ item.domain }}</a></td>
+                      <td>{{ item.date }}</td>
+                    </tr>
+                  </tbody>
+                  <tbody *ngIf="result.type == 'domain'">
+                    <tr *ngFor="let item of result.url.list | slice:0:quantity_url">
+                      <td>{{ item.url }}</td>
                       <td>{{ item.date }}</td>
                     </tr>
                   </tbody>
                 </table>
+                <div *ngIf="result.url == 'FA'">
+                  <p class="lead"> Something went wrong and we were unable to gather URL/Domain information at this time. Please try again later.</p>
+                </div>
               </div>
-              <div class="card-footer">
+              <div *ngIf="result.url != 'FA'" class="card-footer">
                 <p class="lead">
                   Total Count: <strong>{{ result.url.count }}</strong></p>
                 <a *ngIf="result.url.count> 4 && quantity_url == 4" href="javascript:void(0)" (click)="urlQuantity()" class="card-link">Show More</a>
                 <a *ngIf="result.url.count> 4 && quantity_url > 4" href="javascript:void(0)" (click)="urlQuantity()" class="card-link">Show Less</a>
-
+              </div>
+              <div *ngIf="result.url == 'FA'" class="card-footer">
+                <p class="lead">
+                  Total Count: <strong>0</strong></p>
               </div>
             </div>
           </div>

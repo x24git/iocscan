@@ -8,6 +8,7 @@
                     <p>{{message}}</p>
                 </div>
                 <a *ngIf="error.code == 503" class='btn btn-success btn-lg' placement='bottom' ngbTooltip='You are a Hero!' href='https://support.worldwildlife.org/site/Donation2?df_id=12623&12623.donation=form1&s_src=AWE1800OQ18494A01430RX&gclid=CjwKCAjwio3dBRAqEiwAHWsNVefO7wPFxywr0cIWDbAUOimAyBJYwAejaAYcJnKLZFij-jQZ-GpuDBoCk14QAvD_BwE' role='button'>Save a Rhino</a>
+                <a *ngIf="error.code != 503" class='btn btn-success btn-lg' placement='bottom' ngbTooltip='We all make mistakes' href='../home' role='button'>Go Home</a>
 
             </div>
         </div>
