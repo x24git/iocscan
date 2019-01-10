@@ -5,6 +5,7 @@
 /README.md
 
 # compiled output
+/prod
 /dist
 /tmp
 /out-tsc
