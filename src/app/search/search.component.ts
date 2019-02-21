@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { CountryCodeService } from '../country-code.service';
 import { NgProgress, NgProgressRef } from '@ngx-progressbar/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faGlobeAmericas, faChartLine, faMapMarkerAlt, faMapSigns, faBuilding, faExclamationTriangle, faBug, faGlobe, faCalendarAlt, faNetworkWired, faFileInvoice, faExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faGlobeAmericas, faChartLine, faMapMarkerAlt, faMapSigns, faBuilding, faExclamationTriangle, faBug, faGlobe, faCalendarAlt, faNetworkWired, faFileInvoice, faExclamation, faGhost } from '@fortawesome/free-solid-svg-icons';
 import { faKeycdn } from '@fortawesome/free-brands-svg-icons';
 import {timer} from 'rxjs';
 import {take} from 'rxjs/operators';  
@@ -32,6 +32,7 @@ export class SearchComponent implements OnInit {
     faNetworkWired = faNetworkWired;
     faFileInvoice = faFileInvoice;
     faExclamation = faExclamation;
+    faGhost = faGhost;
     thresholdConfig = {
         '0': {color: 'green'},
         '3': {color: 'yellow'},
