@@ -97,25 +97,25 @@
                 <div class="alert alert-danger py-1" *ngIf="result.ransom">
                   <span class="lead"><b> RansomeWare Detected - </b></span> {{result.ransom.malware}} {{result.ransom.type}} at <span class="text-muted"> {{result.ransom.url}} </span>
                 </div>
-                <div class="alert alert-danger py-1" *ngIf="result.score.tor">
+                <div class="alert alert-blacker py-1" *ngIf="result.score.tor">
                   <span class="lead"><b><fa-icon [icon]="faGhost" class="icon-card"></fa-icon>&nbsp;&nbsp;Tor Node&nbsp;&nbsp;<fa-icon [icon]="faGhost" class="icon-card"></fa-icon>&nbsp;&nbsp;- </b></span>This {{result.type}} has been identified as being a tor(anonymizer) exit/entry node. 
                 </div>
                 <div class="alert alert-darker py-1" *ngIf="result.shodan">
                   <span class="lead"><b> Known to Shodan: </b></span>
                   <br>
                   <ul>
-                    <li><b>Category:</b>
+                    <li *ngIf="!result.shodan.dev || !result.shodan.dev.product"><b>Category:</b>
                       <div *ngIf="result.shodan.category.length > 0" style="display: inline-block;">
                         <div *ngFor="let category of result.shodan.category" style="display: inline-block;">
-                          <span class="badge badge-info mx-1"> {{ category }} </span>
+                          <span class="badge badge-light mx-1"> {{ category }} </span>
                         </div>
                       </div>
                       <div *ngIf="result.shodan.category.length == 0" style="display: inline-block;"> <span class="badge badge-dark mx-1">Unknown</span></div>
                     </li>
-                    <li *ngIf="result.shodan.dev.product"><b>Device Type:</b>
+                    <li *ngIf="result.shodan.dev && result.shodan.dev.product"><b>Device Type:</b>
                       <div *ngIf="result.shodan.dev.product" style="display: inline-block;">
                         <div style="display: inline-block;">
-                          <span class="badge badge-dark mx-1"> {{ result.shodan.dev.product }} </span>
+                          <span class="badge badge-light mx-1"> {{ result.shodan.dev.product }} </span>
                         </div>
                       </div>
                     </li>
