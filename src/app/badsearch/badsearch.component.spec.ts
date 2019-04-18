@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { BadsearchComponent } from './badsearch.component';
 
 describe('BadsearchComponent', () => {
@@ -8,6 +8,7 @@ describe('BadsearchComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [ BadsearchComponent ]
     })
     .compileComponents();

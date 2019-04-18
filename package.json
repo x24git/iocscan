@@ -5,14 +5,21 @@
     "ng": "ng",
     "start": "node server.js",
     "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
+    "test": "standard && standard --parser typescript-eslint-parser --plugin typescript *.ts && ng test",
+    "lint": "standard && standard --parser typescript-eslint-parser --plugin typescript *.ts && ng lint",
     "e2e": "ng e2e",
     "prod": "ng build --prod",
     "dev": "ng build",
+    "standard": "standard && standard --parser typescript-eslint-parser --plugin typescript *.ts",
+    "test-headless": "ng test --watch=false --browsers=ChromeHeadless",
     "postbuild": "cp -r dist/iocscan prod",
     "postdev": "cp -r dist/iocscan prod",
     "postprod": "cp -r dist/iocscan prod"
+  },
+  "standard": {
+    "ignore": [
+      "protractor.conf.js"
+      ]
   },
   "private": true,
   "dependencies": {
@@ -83,6 +90,7 @@
     "karma-jasmine": "~1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
+    "standard": "^12.0.1",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "typescript": "~2.7.2"

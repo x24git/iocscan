@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class CountryCodeService {
 
   constructor() { }
-  
+
     isoCountries: any = {
       'AF' : 'Afghanistan',
       'AX' : 'Aland Islands',
@@ -254,7 +254,7 @@ export class CountryCodeService {
       'ZM' : 'Zambia',
       'ZW' : 'Zimbabwe'
   };
-  
+
   getCountryName (countryCode) {
       if (this.isoCountries.hasOwnProperty(countryCode)) {
           return this.isoCountries[countryCode];

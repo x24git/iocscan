@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { SearchshareService } from '../searchshare.service'
+import { SearchshareService } from '../searchshare.service';
 
 @Component({
   selector: 'ioc-support',
@@ -9,9 +9,9 @@ import { SearchshareService } from '../searchshare.service'
 })
 export class SupportComponent implements OnInit {
 
-  constructor( private titleService: Title, private searchTerm: SearchshareService ) { 
-  this.titleService.setTitle( "iocscan" );
-  this.searchTerm.changeMessage('')
+  constructor( private titleService: Title, private searchTerm: SearchshareService ) {
+  this.titleService.setTitle( 'iocscan' );
+  this.searchTerm.changeMessage('');
 }
 
   ngOnInit() {

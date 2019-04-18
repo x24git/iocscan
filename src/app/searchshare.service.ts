@@ -10,7 +10,7 @@ export class SearchshareService {
 
   constructor() { }
   changeMessage(search: string) {
-    this.searchSource.next(search)
+    this.searchSource.next(search);
   }
 }
 
