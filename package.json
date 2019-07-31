@@ -72,7 +72,7 @@
     "supertest": "^3.2.0",
     "whois": "^2.6.0",
     "whois-json": "^2.1.0",
-    "yarn": "^1.12.3",
+    "yarn": "^1.17.3",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
