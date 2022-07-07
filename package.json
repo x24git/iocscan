@@ -58,7 +58,7 @@
     "http-errors": "^1.7.0",
     "jade": "^1.11.0",
     "mocha": "^5.2.0",
-    "moment": "^2.23.0",
+    "moment": "^2.29.4",
     "morgan": "^1.9.0",
     "ngx-gauge-fix": "^1.1.0",
     "ngx-pipes": "^2.3.5",
